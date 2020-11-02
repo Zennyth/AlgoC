@@ -11,7 +11,7 @@
 /*
  * port d'ordinateur pour envoyer et recevoir des messages
  */
-#define PORT 8089
+#define PORT 5555
 
 /* 
  * Fonction d'envoi et de réception de messages

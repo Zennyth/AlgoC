@@ -9,7 +9,7 @@
 #ifndef __SERVER_H__
 #define __SERVER_H__
 
-#define PORT 8089
+#define PORT 5555
 
 /* accepter la nouvelle connection d'un client et lire les données
  * envoyées par le client. En suite, le serveur envoie un message

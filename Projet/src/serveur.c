@@ -97,9 +97,38 @@ int recois_envoie_message(int socketfd) {
   char code[10];
   sscanf(data, "%s", code);
 
-  //Si le message commence par le mot: 'message:' 
-  if (strcmp(code, "message:") == 0) {
+  // Trouver le type de message
+  if (strcmp(code, "nom:") == 0) {
+    printf("nom\n");
     renvoie_message(client_socket_fd, data);
+  } else if (strcmp(code, "couleurs:") == 0) {
+    printf("couleurs\n");
+    char delim[] = "#";
+    char *ptr = strtok(data, delim);
+    ptr = strtok(NULL, delim);
+
+	while(ptr != NULL)
+	{
+		printf("'%s'\n", ptr);
+		ptr = strtok(NULL, delim);
+	}
+    renvoie_message(client_socket_fd, data);
+  } else if (strcmp(code, "calcul:") == 0) {
+    printf("calcul \n");
+    int i1, i2;
+    char response[100] = "calcul: ";
+    if (2 == sscanf(data, "%*[^0123456789]%d%*[^0123456789]%d",&i1,&i2))
+    {
+        char str[100];
+        if (strchr(data, '+') != NULL)
+            sprintf(str, "%i", (i1 + i2));
+        else if (strchr(data, '-') != NULL)
+            sprintf(str, "%i", (i1 - i2));
+        else
+            sprintf(str, "%i", (i1 * i2));
+        strcat(response, str);
+    }
+    renvoie_message(client_socket_fd, response);
   }
   else {
     plot(data);
