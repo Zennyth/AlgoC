@@ -101,18 +101,44 @@ int recois_envoie_message(int socketfd) {
   if (strcmp(code, "nom:") == 0) {
     printf("nom\n");
     renvoie_message(client_socket_fd, data);
-  } else if (strcmp(code, "couleurs:") == 0) {
+  } else if (strcmp(code, "couleurs:") == 0 || strcmp(code, "balises:") == 0) {
     printf("couleurs\n");
-    char delim[] = "#";
-    char *ptr = strtok(data, delim);
-    ptr = strtok(NULL, delim);
 
-	while(ptr != NULL)
-	{
-		printf("'%s'\n", ptr);
-		ptr = strtok(NULL, delim);
-	}
-    renvoie_message(client_socket_fd, data);
+    char file[30] = "./files/";
+    if(strcmp(code, "couleurs:") == 0)
+      strcat(file, "couleurs");
+    else
+      strcat(file, "balises");
+    strcat(file, ".txt");
+
+    char delim[] = "#";
+    char response[100];
+    char *ptr = strtok(data, delim);
+    int i1, index = 1;
+    if (1 == sscanf(ptr, "%*[^0123456789]%d",&i1))
+    {
+      ptr = strtok(NULL, delim);
+      FILE *fp;
+      fp = fopen(file, "a");
+      while(ptr != NULL && index <= i1)
+      {
+        char write[15] = "#";
+        strcpy(response, ptr);
+        response[strlen(response)-2] = '\n';
+        response[strlen(response)-1] = '\0';
+
+        strcat(write, response);
+        fputs(write, fp);
+
+        ptr = strtok(NULL, delim);
+        index++;
+      }
+      fclose(fp);
+      if(strcmp(code, "couleurs:") == 0)
+        renvoie_message(client_socket_fd, "couleurs: enregistré");
+      else
+        renvoie_message(client_socket_fd, "balises: enregistré");
+    }
   } else if (strcmp(code, "calcul:") == 0) {
     printf("calcul \n");
     int i1, i2;

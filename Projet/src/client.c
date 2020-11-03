@@ -28,14 +28,17 @@ int envoie_recois_message(int socketfd) {
   memset(data, 0, sizeof(data));
 
 
-  char typeMessage[100];
+  char typeMessage[100] = "balises";
+  /*
   printf("Votre type de message (max 1000 caracteres): ");
   fgets(typeMessage, 1024, stdin);
-  strtok(typeMessage, "\n");
+  strtok(typeMessage, "\n");*/
   // Demandez à l'utilisateur d'entrer un message
-  char message[100];
+  char message[100] = "3 #azeaze, #azeaze, #125498, #azeaze";
+  /*
   printf("Votre %s (max 1000 caracteres): ", typeMessage);
   fgets(message, 1024, stdin);
+  */
 
   strtok(message, "\n");
 
