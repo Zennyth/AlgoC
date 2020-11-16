@@ -93,13 +93,76 @@ int recois_envoie_message(int socketfd) {
    * extraire le code des données envoyées par le client. 
    * Les données envoyées par le client peuvent commencer par le mot "message :" ou un autre mot.
    */
-  printf ("Message recu: %s\n", data);
   char code[10];
   sscanf(data, "%s", code);
 
-  //Si le message commence par le mot: 'message:' 
-  if (strcmp(code, "message:") == 0) {
+  // Trouver le type de message
+  if (strcmp(code, "nom:") == 0) {
+    printf("nom\n");
     renvoie_message(client_socket_fd, data);
+  } else if (strcmp(code, "couleurs:") == 0 || strcmp(code, "balises:") == 0) {
+    printf("couleurs\n");
+
+    char file[30] = "./files/";
+    if(strcmp(code, "couleurs:") == 0)
+      strcat(file, "couleurs");
+    else
+      strcat(file, "balises");
+    strcat(file, ".txt");
+
+    char delim[] = "#";
+    char response[100];
+    char *ptr = strtok(data, delim);
+    int i1, index = 1;
+    if (1 == sscanf(ptr, "%*[^0123456789]%d",&i1))
+    {
+      ptr = strtok(NULL, delim);
+      FILE *fp;
+      fp = fopen(file, "a");
+      while(ptr != NULL && index <= i1)
+      {
+        char write[15] = "#";
+        strcpy(response, ptr);
+        response[strlen(response)-2] = '\n';
+        response[strlen(response)-1] = '\0';
+
+        strcat(write, response);
+        fputs(write, fp);
+
+        ptr = strtok(NULL, delim);
+        index++;
+      }
+      fclose(fp);
+      if(strcmp(code, "couleurs:") == 0)
+        renvoie_message(client_socket_fd, "couleurs: enregistré");
+      else
+        renvoie_message(client_socket_fd, "balises: enregistré");
+    }
+  } else if (strcmp(code, "calcul:") == 0) {
+    printf("calcul \n");
+    int i1, i2;
+    char response[100] = "calcul: ";
+    if (2 == sscanf(data, "%*[^0123456789]%d%*[^0123456789]%d",&i1,&i2))
+    {
+        char str[100];
+        if (strchr(data, '+') != NULL)
+            sprintf(str, "%i", (i1 + i2));
+        else if (strchr(data, '-') != NULL)
+            sprintf(str, "%i", (i1 - i2));
+        else
+            sprintf(str, "%i", (i1 * i2));
+        strcat(response, str);
+    }
+    renvoie_message(client_socket_fd, response);
+  }
+  else if (strcmp(code, "message:") == 0){
+    printf("Votre type de message (max 1000 caracteres): ");
+    char response[] = "message: ";
+    char user[1024];
+    fgets(user, 1024, stdin);
+    strtok(user, "\n");
+    strcat(response, user);
+    renvoie_message(client_socket_fd, response);
   }
   else {
     plot(data);
