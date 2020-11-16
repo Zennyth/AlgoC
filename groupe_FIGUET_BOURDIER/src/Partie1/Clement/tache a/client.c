@@ -28,25 +28,12 @@ int envoie_recois_message(int socketfd) {
   memset(data, 0, sizeof(data));
 
 
-  char typeMessage[100] = "balises";
-  
-  printf("Votre type de message (max 1000 caracteres): ");
-  fgets(typeMessage, 1024, stdin);
-  strtok(typeMessage, "\n");
   // Demandez à l'utilisateur d'entrer un message
-  char message[100] = "3 #azeaze, #azeaze, #125498, #azeaze";
-  
-  printf("Votre %s (max 1000 caracteres): ", typeMessage);
+  char message[100];
+  printf("Votre message (max 1000 caracteres): ");
   fgets(message, 1024, stdin);
-  
-
-  strtok(message, "\n");
-
-  strcat(typeMessage, ": ");
-  strcpy(data, typeMessage);
+  strcpy(data, "message: ");
   strcat(data, message);
-
-  printf("%s \n", data);
   
   int write_status = write(socketfd, data, strlen(data));
   if ( write_status < 0 ) {
@@ -61,11 +48,11 @@ int envoie_recois_message(int socketfd) {
   // lire les données de la socket
   int read_status = read(socketfd, data, sizeof(data));
   if ( read_status < 0 ) {
-    perror("erreur lecture ");
+    perror("erreur lecture");
     return -1;
   }
 
-  printf("%s\n", data);
+  printf("Message recu: %s\n", data);
  
   return 0;
 }
