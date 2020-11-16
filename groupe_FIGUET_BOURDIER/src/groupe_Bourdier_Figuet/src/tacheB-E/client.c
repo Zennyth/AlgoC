@@ -15,7 +15,6 @@
 
 #include "client.h"
 #include "bmp.h"
-#include "json.h"
 
 /* 
  * Fonction d'envoi et de réception de messages
@@ -23,41 +22,28 @@
  */
 
 int envoie_recois_message(int socketfd) {
-  
+ 
   char data[1024];
   // la réinitialisation de l'ensemble des données
   memset(data, 0, sizeof(data));
-<<<<<<< HEAD
-  /*
-=======
 
 
   char typeMessage[100] = "balises";
-  
->>>>>>> 40d9f41cf0e6541f064f49d660ecc7b3d9b2fa2a
+  /*
   printf("Votre type de message (max 1000 caracteres): ");
   fgets(typeMessage, 1024, stdin);
-  strtok(typeMessage, "\n");
+  strtok(typeMessage, "\n");*/
   // Demandez à l'utilisateur d'entrer un message
-<<<<<<< HEAD
-  char message[100] = "{code:\"calcul\",valeurs:[\"*\",\"1\",\"2\"]}";
+  char message[100] = "3 #azeaze, #azeaze, #125498, #azeaze";
   /*
   printf("Votre %s (max 1000 caracteres): ", typeMessage);
   fgets(message, 1024, stdin);
   */
-  //char send[] = "{code:\"calcul\",valeurs:[oui,\"non\",\"10\",\"50\",\"30\"]}";
-=======
-  char message[100] = "3 #azeaze, #azeaze, #125498, #azeaze";
-  
-  printf("Votre %s (max 1000 caracteres): ", typeMessage);
-  fgets(message, 1024, stdin);
-  
 
   strtok(message, "\n");
 
   strcat(typeMessage, ": ");
   strcpy(data, typeMessage);
->>>>>>> 40d9f41cf0e6541f064f49d660ecc7b3d9b2fa2a
   strcat(data, message);
 
   printf("%s \n", data);
@@ -111,28 +97,16 @@ void analyse(char *pathname, char *data) {
   data[strlen(data)-1] = '\0';
 }
 
-int envoie_recois_json(int socketfd, char *data) {
-  /*
-
-  int write_status = write(socketfd, &json, sizeof(json));
+int envoie_couleurs(int socketfd, char *pathname) {
+  char data[1024];
+  memset(data, 0, sizeof(data));
+  analyse(pathname, data);
+  
+  int write_status = write(socketfd, data, strlen(data));
   if ( write_status < 0 ) {
     perror("erreur ecriture");
     exit(EXIT_FAILURE);
   }
-
-  char data[1024];
-  // la réinitialisation de l'ensemble des données
-  memset(data, 0, sizeof(data));
-  // lire les données de la socket
-  int read_status = read(socketfd, data, sizeof(data));
-  if ( read_status < 0 ) {
-    perror("erreur lecture ");
-    return -1;
-  }
-
-  printf("Message reçu : %s\n", data);
-  */
-  parse(data);
 
   return 0;
 }
@@ -165,8 +139,6 @@ int main(int argc, char **argv) {
     perror("connection serveur");
     exit(EXIT_FAILURE);
   }
-
-  //envoie_recois_json(socketfd, send);
   envoie_recois_message(socketfd);
   //envoie_couleurs(socketfd, argv[1]);
 
