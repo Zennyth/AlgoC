@@ -1,2 +1,3 @@
-### BOURDIER Clément
-### FIGUET Mathis
+### Les auteurs de cette tâche sont :
+- #### BOURDIER Clément
+- #### FIGUET Mathis
