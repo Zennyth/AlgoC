@@ -28,9 +28,7 @@ int envoie_recois_message(int socketfd) {
   memset(data, 0, sizeof(data));
 
 
-  // Demandez à l'utilisateur d'entrer un type de message
   // Demandez à l'utilisateur d'entrer un message
-  // Demandez à l'utilisateur d'entrer un type de message: message
   char message[100];
   printf("Votre message (max 1000 caracteres): ");
   fgets(message, 1024, stdin);
@@ -65,14 +63,18 @@ void analyse(char *pathname, char *data) {
 
   int count;
   strcpy(data, "couleurs: ");
-  char temp_string[10] = "10,";
-  if (cc->size < 10) {
-    sprintf(temp_string, "%d,", cc->size);
+  char nbCouleurs[100];
+  printf("Votre nombre de couleurs (max 30): ");
+  fgets(nbCouleurs, 1024, stdin);
+  int n = atoi(nbCouleurs);
+  char temp_string[10] = "30,";
+  if (n != 30) {
+    sprintf(temp_string, "%i,", n);
   }
   strcat(data, temp_string);
   
-  //choisir 10 couleurs
-  for (count = 1; count < 11 && cc->size - count >0; count++) {
+  //choisir 30 couleurs
+  for (count = 1; count < (n+1) && cc->size - count >0; count++) {
     if(cc->compte_bit ==  BITS32) {
       sprintf(temp_string, "#%02x%02x%02x,", cc->cc.cc24[cc->size-count].c.rouge,cc->cc.cc32[cc->size-count].c.vert,cc->cc.cc32[cc->size-count].c.bleu);
     }
@@ -81,7 +83,6 @@ void analyse(char *pathname, char *data) {
     }
     strcat(data, temp_string);
   }
-
   //enlever le dernier virgule
   data[strlen(data)-1] = '\0';
 }
@@ -128,8 +129,8 @@ int main(int argc, char **argv) {
     perror("connection serveur");
     exit(EXIT_FAILURE);
   }
-  envoie_recois_message(socketfd);
-  //envoie_couleurs(socketfd, argv[1]);
+  //envoie_recois_message(socketfd);
+  envoie_couleurs(socketfd, argv[1]);
 
   close(socketfd);
 }

@@ -25,10 +25,13 @@ void plot(char *data) {
   int n;
   char *saveptr = NULL;
   char *str = data;
+  int nb;
+  if(1 != sscanf(data, "%*[^0123456789]%d",&nb))
+    nb = 30;
   fprintf(p, "set xrange [-15:15]\n");
   fprintf(p, "set yrange [-15:15]\n");
   fprintf(p, "set style fill transparent solid 0.9 noborder\n");
-  fprintf(p, "set title 'Top 10 colors'\n");
+  fprintf(p, "set title 'Top %i colors'\n", nb);
   fprintf(p, "plot '-' with circles lc rgbcolor variable\n");
   while(1) {
     char *token = strtok_r(str, ",", &saveptr);
@@ -40,8 +43,8 @@ void plot(char *data) {
       n = atoi(token);
     }
     else {
-      // Le numéro 36, parceque 360° (cercle) / 10 couleurs = 36
-      fprintf(p, "0 0 10 %d %d 0x%s\n", (count-1)*36, count*36, token+1);
+      // Le numéro 36, parceque 360° (cercle) / 10 couleurs = n
+      fprintf(p, "0 0 10 %i %i 0x%s\n", (int) (count-1)*360/nb, (int) count*360/nb, token+1);
     }
     count++;
   }
@@ -97,8 +100,7 @@ int recois_envoie_message(int socketfd) {
   char code[10];
   sscanf(data, "%s", code);
 
-
-  // Trouver le type de message
+  //Si le message commence par le mot: 'message:' 
   if (strcmp(code, "message:") == 0) {
     renvoie_message(client_socket_fd, data);
   }
