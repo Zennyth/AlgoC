@@ -6,6 +6,9 @@
 > Nous avons donc un dossier **src** dans lequel se trouve toutes les sources de la Tâche 1.
 > Pour savoir comment exécuter ce code, regardé le **_INSTALL_**.
 
+#### Dossier :
+> Nous avons un dossier files qui stocke tous les fichiers textes (couleurs et balises)
+
 #### Bibliothèques :
 > Nous n'avons pas touché aux bibliothèques, nous avons gardé tous les imports qui était déjà présent dans la code (string.h, unistd.h, stdio.h, stdlib.h).
 
@@ -18,4 +21,4 @@
 > Ensuite, une fois dans le bain, cette première tâche n'a pas tellement été difficile pour notre groupe, nous pensons avoir tout réussi.
 
 #### Commentaires :
-> RAS
+> Nous avons opté pour une solution modulable sans avoir découpé notre code en sous fonction.

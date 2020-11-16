@@ -1,2 +1,2 @@
 ### Description de la compilation et l'execution de votre application
-Pour effectuer la compilation, il suffit de faire la commande **_make all_** avant de faire d'exécuter le script  **_serveur_** et **_client_**.
+Pour effectuer la compilation, il suffit de faire la commande **_make all_** avant d'exécuter les scripts  **_serveur_** et **_client_**.
