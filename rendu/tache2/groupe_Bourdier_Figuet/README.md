@@ -3,7 +3,7 @@
 > La communication se fait encore avec des **_string_**, le JSON nous sert juste à intéragir.
 
 #### Fichiers :
-> Nous avons donc un dossier **src** dans lequel se trouve toutes les sources de la Tâche 1.
+> Nous avons donc un dossier **src** dans lequel se trouve toutes les sources de la Tâche 2.
 > Nous avons un autre dossier **images** dans lequel se trouve les _images_ pour la fonction _couleur_.
 > Pour savoir comment exécuter ce code, regardé le **_INSTALL_**.
 
@@ -24,4 +24,4 @@
 #### Commentaires :
 > Nous avons opté pour une solution modulable sans avoir découpé notre code en sous fonction.
 > Nous avons rencontré un petit problème durant la réalisation de cette tâche. En effet, nous avions opté, au départ, pour l'utilisation de _Structure_ pour communiquer entre le _client_ et le _serveur_. Ensuite, nous nous sommes rendu compte que l'utilisation de _Stucture_ pour la communication allait nous pénaliser pour les futures tâches et nous avons donc demandé à un professeur qui nous a dit qu'il fallait utiliser des **_string_** pour la communication.
-
+> On a d'ores et déjà commencé la tâche 3 en faisant le traitement mais nous renvoyons une string qui n'est pas au format JSON.
