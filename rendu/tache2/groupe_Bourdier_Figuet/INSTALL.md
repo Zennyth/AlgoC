@@ -1,0 +1,2 @@
+### Description de la compilation et l'execution de votre application
+Pour effectuer la compilation, il suffit de se diriger dans le dossier **_src_** avec la commande **_cd /src_** puis de faire la commande **_make all_** avant d'exécuter les scripts **_serveur_** et **_client_**.
