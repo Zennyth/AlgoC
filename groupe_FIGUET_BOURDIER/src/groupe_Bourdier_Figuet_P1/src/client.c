@@ -15,7 +15,6 @@
 
 #include "client.h"
 #include "bmp.h"
-#include "json.h"
 
 /* 
  * Fonction d'envoi et de réception de messages
@@ -23,23 +22,26 @@
  */
 
 int envoie_recois_message(int socketfd) {
-  
+ 
   char data[1024];
   // la réinitialisation de l'ensemble des données
   memset(data, 0, sizeof(data));
 
-  char typeMessage[100] = "";
+
+  char typeMessage[100] = "message";
   printf("Votre type de message (max 1000 caracteres): ");
   fgets(typeMessage, 1024, stdin);
   strtok(typeMessage, "\n");
-
   // Demandez à l'utilisateur d'entrer un message
-  char message[100] = "";
-  printf("Votre %s (max 1000 caracteres): ", message);
+  char message[100] = "Hello world !";
+  printf("Votre %s (max 1000 caracteres): ", typeMessage);
   fgets(message, 1024, stdin);
+
   strtok(message, "\n");
 
-  sprintf(data, "{code:\"%s\",valeurs:[%s]}", typeMessage, message);
+  strcat(typeMessage, ": ");
+  strcpy(data, typeMessage);
+  strcat(data, message);
   
   int write_status = write(socketfd, data, strlen(data));
   if ( write_status < 0 ) {
@@ -49,6 +51,7 @@ int envoie_recois_message(int socketfd) {
 
   // la réinitialisation de l'ensemble des données
   memset(data, 0, sizeof(data));
+
 
   // lire les données de la socket
   int read_status = read(socketfd, data, sizeof(data));
@@ -62,25 +65,20 @@ int envoie_recois_message(int socketfd) {
   return 0;
 }
 
-
 void analyse(char *pathname, char *data) {
   //compte de couleurs
   couleur_compteur *cc = analyse_bmp_image(pathname);
 
   int count;
-  strcpy(data, "{code:plot,valeurs:[");
-  char nbCouleurs[100];
-  printf("Votre nombre de couleurs (max 30): ");
-  fgets(nbCouleurs, 1024, stdin);
-  int n = atoi(nbCouleurs);
-  char temp_string[10] = "30,";
-  if (n != 30) {
-    sprintf(temp_string, "%i,", n);
+  strcpy(data, "couleurs: ");
+  char temp_string[10] = "10,";
+  if (cc->size < 10) {
+    sprintf(temp_string, "%d,", cc->size);
   }
   strcat(data, temp_string);
   
-  //choisir 30 couleurs
-  for (count = 1; count < (n+1) && cc->size - count >0; count++) {
+  //choisir 10 couleurs
+  for (count = 1; count < 11 && cc->size - count >0; count++) {
     if(cc->compte_bit ==  BITS32) {
       sprintf(temp_string, "#%02x%02x%02x,", cc->cc.cc24[cc->size-count].c.rouge,cc->cc.cc32[cc->size-count].c.vert,cc->cc.cc32[cc->size-count].c.bleu);
     }
@@ -89,21 +87,25 @@ void analyse(char *pathname, char *data) {
     }
     strcat(data, temp_string);
   }
+
   //enlever le dernier virgule
-  strcat(data, "]}");
+  data[strlen(data)-1] = '\0';
 }
 
 int envoie_couleurs(int socketfd, char *pathname) {
   char data[1024];
   memset(data, 0, sizeof(data));
   analyse(pathname, data);
+  
   int write_status = write(socketfd, data, strlen(data));
   if ( write_status < 0 ) {
     perror("erreur ecriture");
     exit(EXIT_FAILURE);
   }
+
   return 0;
 }
+
 
 int main(int argc, char **argv) {
   int socketfd;
@@ -132,9 +134,8 @@ int main(int argc, char **argv) {
     perror("connection serveur");
     exit(EXIT_FAILURE);
   }
-
-  //envoie_recois_json(socketfd, send);
   envoie_recois_message(socketfd);
   //envoie_couleurs(socketfd, argv[1]);
+
   close(socketfd);
 }
