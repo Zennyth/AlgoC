@@ -19,10 +19,9 @@
 
 #### Difficultés :
 > Après avoir terminé cette deuxième tâche, nous avons remarqué que sa difficulté est plus grande que la tâche précédente _(tâche1)_.
-> Au début, nous avons eu des difficultés car nous avions besoin d'un petit temps de ré-adapation puisque cela fait longtemps que l'on avait pas fait de C.
-> Ensuite, une fois dans le bain, cette première tâche n'a pas tellement été difficile pour notre groupe, nous pensons avoir tout réussi.
+> Ce n'était pas irréalisable mais la difficulté à augmenté.
 
 #### Commentaires :
 > Nous avons opté pour une solution modulable sans avoir découpé notre code en sous fonction.
-> Nous avons rencontré un petit problème durant la réalisation de cette tâche. En effet, nous avions opté, au départ, pour l'utilisation de structure lors de la réecriture du format JSON. Ensuite, nous nous sommes rendu compte que l'utilisation de stucture allait nous pénaliser pour les futures tâches. Nous avons donc dû changer
+> Nous avons rencontré un petit problème durant la réalisation de cette tâche. En effet, nous avions opté, au départ, pour l'utilisation de _Structure_ pour communiquer entre le _client_ et le _serveur_. Ensuite, nous nous sommes rendu compte que l'utilisation de _Stucture_ pour la communication allait nous pénaliser pour les futures tâches et nous avons donc demandé à un professeur qui nous a dit qu'il fallait utiliser des **_string_** pour la communication.
 
