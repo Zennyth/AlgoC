@@ -19,78 +19,6 @@
 #include "json.c"
 #include "bmp.h"
 
-// Import que l'on a fait
-#include <math.h>
-
-
-// Fonction qui retourne le minimum
-int minimum(const char res[30][100]){
-  int i = 1;
-  int min = atoi(res[i]);
-  for (i ; i < NUMBER_OF_STRING; i++)
-	{
-    if(res[i][0] != '\0') {
-      int nb = atoi(res[i]);
-      if ( min < nb )
-        min = min;
-      else
-        min = nb;
-    }
-	}
-  return min;
-}
-
-// Fonction qui retourne le maximum
-int maximum(const char res[30][100]){
-  int i = 1;
-  int max = atoi(res[i]);
-  for (i ; i < NUMBER_OF_STRING; i++)
-	{
-    if(res[i][0] != '\0') {
-      int nb = atoi(res[i]);
-      if ( max > nb )
-        max = max;
-      else
-        max = nb;
-    }
-	}
-  return max;
-}
-
-// Fonction qui retourne la moyenne
-float moyenne(const char res[30][100]){
-  int i = 1;
-  float moy;
-  float somme = 0;
-  for (i ; i < NUMBER_OF_STRING; i++)
-	{
-    if(res[i][0] != '\0') {
-      int nb = atoi(res[i]);
-      somme = somme + nb;
-      moy = somme / i;
-    }
-	}
-  return moy;
-}
-
-// Fonction qui retourne l'ecarttype
-float ecarttype(const char res[30][100]){
-  int i = 1;
-  float moy = moyenne(res);
-  float somme = 0;
-  float ecarttype;
-  for (i ; i < NUMBER_OF_STRING; i++)
-	{
-    if(res[i][0] != '\0') {
-      int nb = atoi(res[i]);
-      somme = somme + pow(nb - moy,2);
-      ecarttype = sqrt(somme/i);
-    }
-	}
-  return ecarttype;
-}
-
-
 void plot(struct Json data) {
   
   //Extraire le compteur et les couleurs RGB 
@@ -115,7 +43,6 @@ void plot(struct Json data) {
   printf("Plot: FIN\n");
   pclose(p);
 }
-
 
 /* renvoyer un message (*data) au client (client_socket_fd)
  */
@@ -203,14 +130,6 @@ int recois_envoie_message(int socketfd) {
         sprintf(str, "%i", (i1 + i2));
     else if (strchr(res.valeurs[0], '-') != NULL)
         sprintf(str, "%i", (i1 - i2));
-    else if (strcmp(res.valeurs[0], "minimum") == 0)
-        sprintf(str, "%i", minimum(res.valeurs));
-    else if (strcmp(res.valeurs[0], "maximum") == 0)
-        sprintf(str, "%i", maximum(res.valeurs));
-    else if (strcmp(res.valeurs[0], "moyenne") == 0)
-        sprintf(str, "%.2f", moyenne(res.valeurs));
-    else if (strcmp(res.valeurs[0], "ecarttype") == 0)
-        sprintf(str, "%.2f", ecarttype(res.valeurs)); 
     else
         sprintf(str, "%i", (i1 * i2));
     strcpy(response.valeurs[0], str);
@@ -227,7 +146,6 @@ int recois_envoie_message(int socketfd) {
   //fermer le socket
   close(socketfd);
 }
-
 
 int main() {
 
