@@ -59,13 +59,21 @@ int envoie_recois_message(char *pathname) {
   memset(data, 0, sizeof(data));
 
   // Exemple d'entré pour couleurs
+<<<<<<< Updated upstream
   //char typeMessage[100] = "\"couleurs\"";
   char typeMessage[100] = "";
   printf("Votre type de message (max 1000 caracteres): ");
   fgets(typeMessage, 1024, stdin);
   strtok(typeMessage, "\n");
+=======
+  //char typeMessage[100] = "\"couleurs\""; 
+  char typeMessage[100] = "";
+  printf("Votre type de message (max 1000 caracteres): ");  
+  fgets(typeMessage, 1024, stdin);
+  strtok(typeMessage, "\n");
+  
+>>>>>>> Stashed changes
   char message[500] = "";
-
   if(strcmp(typeMessage, "couleurs") == 0 || strcmp(typeMessage, "balises") == 0 || strcmp(typeMessage, "plot") == 0) {
     analyse(pathname, message);
     sprintf(data, "{\"code\":\"%s\",\"valeurs\":[%s]}", typeMessage, message);

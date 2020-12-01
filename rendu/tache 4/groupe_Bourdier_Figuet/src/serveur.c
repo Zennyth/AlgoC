@@ -28,7 +28,7 @@ int intComparator ( const void * first, const void * second ) {
     return firstInt - secondInt;
 }
 // Fonction de tri du tableau 
-int sort(const char res[30][100]){
+int * sort(const char res[30][100]){
   int i = 2;
   int min = atoi(res[i]);
   int tab[NUMBER_OF_STRING];
@@ -41,7 +41,7 @@ int sort(const char res[30][100]){
 	}
   
   qsort(tab,sizeof tab / sizeof tab[0] - 4,sizeof tab[0], intComparator);
-  for (int j = 0 ; j < sizeof tab / sizeof tab[0] ; j++)
+  /*for (int j = 0 ; j < sizeof tab / sizeof tab[0] ; j++)
   {
     int nb2 = tab[j];
     if (nb2 != 0)
@@ -49,16 +49,24 @@ int sort(const char res[30][100]){
       if(tab[j] != '\0') {
         printf("%d\n", tab[j]); 
       }
-    }
-      
-  }
-  
+    }  
+  }*/
+  return tab;
 }
 
-// Fonction qui retourne le minimum
-int minimum(const char res[30][100]){
-  sort(res);
-  int i = 1;
+// Fonction qui retourne le minimumtabtab
+struct Json minimum(const char res[30][100]){
+  int tab[NUMBER_OF_STRING] = sort(res);
+  char tabtab[NUMBER_OF_STRING];
+  struct Json tabreturn = {"calcul",{""}};
+  int nbval = atoi(res[2]);
+  for (int i = 0; i < nbval; i++)
+  {
+    strcpy(tabreturn.valeurs[i],itoa(tab[i],tabtab,10));
+  }
+  return tabreturn;
+
+  /*int i = 1;
   int min = atoi(res[i]);
   for (i ; i < NUMBER_OF_STRING; i++)
 	{
@@ -70,7 +78,7 @@ int minimum(const char res[30][100]){
         min = nb;
     }
 	}
-  return min;
+  return min;*/
 }
 
 // Fonction qui retourne le maximum
@@ -235,7 +243,10 @@ int recois_envoie_message(int socketfd) {
     else if (strchr(res.valeurs[0], '-') != NULL)
         sprintf(str, "%i", (i1 - i2));
     else if (strcmp(res.valeurs[0], "\"minimum\"") == 0)
-        sprintf(str, "%i", minimum(res.valeurs));
+      {
+      //sprintf(str, "%i", minimum(res.valeurs));
+      printf("%s",toString(minimum(res.valeurs)));
+      }
     else if (strcmp(res.valeurs[0], "\"maximum\"") == 0)
         sprintf(str, "%i", maximum(res.valeurs));
     else if (strcmp(res.valeurs[0], "\"moyenne\"") == 0)
