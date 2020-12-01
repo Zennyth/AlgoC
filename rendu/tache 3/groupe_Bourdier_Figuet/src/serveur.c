@@ -114,7 +114,6 @@ int recois_envoie_message(int socketfd) {
         char line[30] = "";
         strcpy(line, res.valeurs[i]);
         strcat(line, "\n");
-        printf("%s", line);
         // On écrit dans le fichier
         fputs(line, fp);
       }
@@ -143,7 +142,7 @@ int recois_envoie_message(int socketfd) {
     strcpy(response.valeurs[0], "\"Pas de code valide !\"");
   }
   renvoie_message(client_socket_fd, toString(response));
-  //fermer le socket
+  //fermer le socket 
   close(socketfd);
 }
 

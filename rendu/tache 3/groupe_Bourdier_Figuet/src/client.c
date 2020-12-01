@@ -17,12 +17,42 @@
 #include "bmp.h"
 #include "json.h"
 
+void analyse(char *pathname, char *data) {
+  //compte de couleurs
+  couleur_compteur *cc = analyse_bmp_image(pathname);
+
+  int count;
+  //strcpy(data, "{code:\"couleurs\",valeurs:[");
+  char nbCouleurs[100];
+  printf("Votre nombre de couleurs (max 30): ");
+  fgets(nbCouleurs, 1024, stdin);
+  int n = atoi(nbCouleurs);
+  char temp_string[15] = "30,";
+  if (n != 30) {
+    sprintf(temp_string, "%i,", n);
+  }
+  strcat(data, temp_string);
+  
+  //choisir 30 couleurs
+  for (count = 1; count < (n+1) && cc->size - count >0; count++) {
+    if(cc->compte_bit ==  BITS32) {
+      sprintf(temp_string, "\"#%02x%02x%02x\",", cc->cc.cc24[cc->size-count].c.rouge,cc->cc.cc32[cc->size-count].c.vert,cc->cc.cc32[cc->size-count].c.bleu);
+    }
+    if(cc->compte_bit ==  BITS24) {
+      sprintf(temp_string, "\"#%02x%02x%02x\",", cc->cc.cc32[cc->size-count].c.rouge,cc->cc.cc32[cc->size-count].c.vert,cc->cc.cc32[cc->size-count].c.bleu);
+    }
+    strcat(data, temp_string);
+  }
+  data[strlen(data)-1] = '\0';
+  //enlever le dernier virgule 
+}
+
 /* 
  * Fonction d'envoi et de réception de messages
  * Il faut un argument : l'identifiant de la socket
  */
 
-int envoie_recois_message() {
+int envoie_recois_message(char *pathname) {
   
   char data[1024];
   // la réinitialisation de l'ensemble des données
@@ -30,24 +60,30 @@ int envoie_recois_message() {
 
   // Exemple d'entré pour couleurs
   //char typeMessage[100] = "\"couleurs\"";
-  char typeMessage[100] = "";
+  char typeMessage[100] = "message";
+  /*
   printf("Votre type de message (max 1000 caracteres): ");
   fgets(typeMessage, 1024, stdin);
-  strtok(typeMessage, "\n");
+  strtok(typeMessage, "\n");*/
+  char message[500] = "";
 
-  // Demandez à l'utilisateur d'entrer un message
-  // Exemple d'entré pour couleurs
-  //char message[100] = "10,\"#123456\",\"#123456\",\"#123456\",\"#123456\",\"#123456\"";
-  char message[100] = "";
-  printf("Votre %s (max 1000 caracteres): ", message);
-  fgets(message, 1024, stdin);
-  strtok(message, "\n");
-
-  sprintf(data, "{\"code\":%s,\"valeurs\":[%s]}", typeMessage, message);
+  if(strcmp(typeMessage, "couleurs") == 0 || strcmp(typeMessage, "balises") == 0 || strcmp(typeMessage, "plot") == 0) {
+    analyse(pathname, message);
+    sprintf(data, "{\"code\":\"%s\",\"valeurs\":[%s]}", typeMessage, message);
+  } else {
+    // Demandez à l'utilisateur d'entrer un message
+    // Exemple d'entré pour couleurs
+    //char message[100] = "10,\"#123456\",\"#123456\",\"#123456\",\"#123456\",\"#123456\"";
+    printf("Votre message %s (max 1000 caracteres): ", message);
+    fgets(message, 1024, stdin);
+    strtok(message, "\n");
+    sprintf(data, "{\"code\":\"%s\",\"valeurs\":[\"%s\"]}", typeMessage, message);
+  }
 
   struct Json res = parse(strdup(data));
 
   if (strcmp(res.code, "\"error\"") == 0) {
+    print_array(res);
     perror("erreur convertion json");
     return -1;
   } else {
@@ -100,37 +136,6 @@ int envoie_recois_message() {
   return 0;
 }
 
-
-void analyse(char *pathname, char *data) {
-  //compte de couleurs
-  couleur_compteur *cc = analyse_bmp_image(pathname);
-
-  int count;
-  strcpy(data, "{code:plot,valeurs:[");
-  char nbCouleurs[100];
-  printf("Votre nombre de couleurs (max 30): ");
-  fgets(nbCouleurs, 1024, stdin);
-  int n = atoi(nbCouleurs);
-  char temp_string[10] = "30,";
-  if (n != 30) {
-    sprintf(temp_string, "%i,", n);
-  }
-  strcat(data, temp_string);
-  
-  //choisir 30 couleurs
-  for (count = 1; count < (n+1) && cc->size - count >0; count++) {
-    if(cc->compte_bit ==  BITS32) {
-      sprintf(temp_string, "#%02x%02x%02x,", cc->cc.cc24[cc->size-count].c.rouge,cc->cc.cc32[cc->size-count].c.vert,cc->cc.cc32[cc->size-count].c.bleu);
-    }
-    if(cc->compte_bit ==  BITS24) {
-      sprintf(temp_string, "#%02x%02x%02x,", cc->cc.cc32[cc->size-count].c.rouge,cc->cc.cc32[cc->size-count].c.vert,cc->cc.cc32[cc->size-count].c.bleu);
-    }
-    strcat(data, temp_string);
-  }
-  //enlever le dernier virgule
-  strcat(data, "]}");
-}
-
 int envoie_couleurs(int socketfd, char *pathname) {
   char data[1024];
   memset(data, 0, sizeof(data));
@@ -170,10 +175,9 @@ int main(int argc, char **argv) {
   if ( connect_status < 0 ) {
     perror("connection serveur");
     exit(EXIT_FAILURE);
-  }*/
-
-  //envoie_recois_json(socketfd, send);
-  envoie_recois_message();
+  }
+  */
+  envoie_recois_message(argv[1]);
   //envoie_couleurs(socketfd, argv[1]);
   close(socketfd);
 }
