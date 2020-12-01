@@ -125,6 +125,7 @@ struct Json parse(char src[])
       char *code = "\"error\"";
       strcpy(json.code, code);
       strcpy(json.valeurs[0], "\"Définition du json incorrect !\"");
+      break;
     }
     ptr = strtok(NULL, delim);
     i++;

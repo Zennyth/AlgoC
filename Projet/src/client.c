@@ -60,11 +60,10 @@ int envoie_recois_message(char *pathname) {
 
   // Exemple d'entré pour couleurs
   //char typeMessage[100] = "\"couleurs\"";
-  char typeMessage[100] = "message";
-  /*
+  char typeMessage[100] = "";
   printf("Votre type de message (max 1000 caracteres): ");
   fgets(typeMessage, 1024, stdin);
-  strtok(typeMessage, "\n");*/
+  strtok(typeMessage, "\n");
   char message[500] = "";
 
   if(strcmp(typeMessage, "couleurs") == 0 || strcmp(typeMessage, "balises") == 0 || strcmp(typeMessage, "plot") == 0) {
@@ -77,7 +76,11 @@ int envoie_recois_message(char *pathname) {
     printf("Votre message %s (max 1000 caracteres): ", message);
     fgets(message, 1024, stdin);
     strtok(message, "\n");
-    sprintf(data, "{\"code\":\"%s\",\"valeurs\":[\"%s\"]}", typeMessage, message);
+    if(strcmp(typeMessage, "calcul") == 0) {
+      sprintf(data, "{\"code\":\"%s\",\"valeurs\":[%s]}", typeMessage, message);
+    } else {
+      sprintf(data, "{\"code\":\"%s\",\"valeurs\":[\"%s\"]}", typeMessage, message);
+    }
   }
 
   struct Json res = parse(strdup(data));

@@ -3,8 +3,9 @@
 > La communication se fait encore avec des **_string_**, le JSON nous sert juste à intéragir.
 
 #### Fichiers :
-> Nous avons donc un dossier **src** dans lequel se trouve toutes les sources de la Tâche 2.
+> Nous avons donc un dossier **src** dans lequel se trouve toutes les sources de la Tâche 3.
 > Nous avons un autre dossier **images** dans lequel se trouve les _images_ pour la fonction _couleur_.
+> Nous avons un autre fichier **json** dans lequel se trouve le code de la librairie Json.
 > Pour savoir comment exécuter ce code, regardé le **_INSTALL_**.
 
 #### Dossier :
@@ -18,10 +19,15 @@
 > Nous avons également demandé de l'aide à un groupe (BOYER Charles et LAZARETH Baptiste) en cas de dernier recours.
 
 #### Difficultés :
-> Après avoir terminé cette deuxième tâche, nous avons remarqué que sa difficulté est plus grande que la tâche précédente _(tâche1)_.
+> Cette râche était définitivement plus dur que les précedentes puisque nous avons suivis une architecture de code précise.
 > Ce n'était pas irréalisable mais la difficulté à augmenté.
 
 #### Commentaires :
-> Nous avons opté pour une solution modulable sans avoir découpé notre code en sous fonction.
-> Nous avons rencontré un petit problème durant la réalisation de cette tâche. En effet, nous avions opté, au départ, pour l'utilisation de _Structure_ pour communiquer entre le _client_ et le _serveur_. Ensuite, nous nous sommes rendu compte que l'utilisation de _Stucture_ pour la communication allait nous pénaliser pour les futures tâches et nous avons donc demandé à un professeur qui nous a dit qu'il fallait utiliser des **_string_** pour la communication.
-> On a d'ores et déjà commencé la tâche 3 en faisant le traitement mais nous renvoyons une string qui n'est pas au format JSON.
+> Voici la description du fonctionnemnt de notre librairie Json qui pour l'instant est bien maigre comparé à l'originale.
+> String -> Vérificator -> Parsor -> Json Object
+> Concernant le parsing nous avons opté avec un découpage en index pour ainsi éviter au maximum les erreurs de saisie.
+> Nous avons décidé de gérer les erreurs avec d'autres objets json qui ont comme code: "error", ils ont aussi une description de l'erreur en question dans la propriété valeurs, ils sont sont ensuite affichés si jamais il y a eu une erreur de parsing.
+> Nous avons décidé de lever une exception si jamais l'utilisateur ne respectait pas le format suivant :
+> Propriété : "code", "valeurs" -> Exception levé : "Vous n'avez pas défini la propiété code" ou "Vous n'avez pas défini la propiété valeurs"
+> les valeurs des propriétés si dessus doivent respecté le format suivant :
+> "" pour les string et pas de guillemet pour les nombres
