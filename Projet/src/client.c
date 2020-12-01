@@ -27,23 +27,23 @@ int envoie_recois_message() {
   char data[1024];
   // la réinitialisation de l'ensemble des données
   memset(data, 0, sizeof(data));
-
+  printf("dshjgc");
   // Exemple d'entré pour couleurs
   //char typeMessage[100] = "\"couleurs\"";
-  char typeMessage[100] = "";
-  printf("Votre type de message (max 1000 caracteres): ");
+  char typeMessage[100] = "calcul";
+  /*printf("Votre type de message (max 1000 caracteres): ");
   fgets(typeMessage, 1024, stdin);
-  strtok(typeMessage, "\n");
+  strtok(typeMessage, "\n");*/
 
   // Demandez à l'utilisateur d'entrer un message
   // Exemple d'entré pour couleurs
   //char message[100] = "10,\"#123456\",\"#123456\",\"#123456\",\"#123456\",\"#123456\"";
-  char message[100] = "";
-  printf("Votre %s (max 1000 caracteres): ", message);
+  char message[100] = "\"minimum\",1,50,65,34,57,21";
+  /*printf("Votre %s (max 1000 caracteres): ", message);
   fgets(message, 1024, stdin);
-  strtok(message, "\n");
+  strtok(message, "\n");*/
 
-  sprintf(data, "{\"code\":%s,\"valeurs\":[%s]}", typeMessage, message);
+  sprintf(data, "{\"code\":\"%s\",\"valeurs\":[%s]}", typeMessage, message);
 
   struct Json res = parse(strdup(data));
 

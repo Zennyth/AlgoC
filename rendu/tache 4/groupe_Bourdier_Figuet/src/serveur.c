@@ -22,9 +22,42 @@
 // Import que l'on a fait
 #include <math.h>
 
+int intComparator ( const void * first, const void * second ) {
+    int firstInt = * (const int *) first;
+    int secondInt = * (const int *) second;
+    return firstInt - secondInt;
+}
+// Fonction de tri du tableau
+int sort(const char res[30][100]){
+  int i = 2;
+  int min = atoi(res[i]);
+  int tab[NUMBER_OF_STRING];
+  for (i ; i < NUMBER_OF_STRING; i++)
+	{
+    if(res[i][0] != '\0') {
+      int nb = atoi(res[i]);
+      tab[i-2] = nb;
+    } 
+	}
+  
+  qsort(tab,sizeof tab / sizeof tab[0] - 4,sizeof tab[0], intComparator);
+  for (int j = 0 ; j < sizeof tab / sizeof tab[0] ; j++)
+  {
+    int nb2 = tab[j];
+    if (nb2 != 0)
+    {
+      if(tab[j] != '\0') {
+        printf("%d\n", tab[j]); 
+      }
+    }
+      
+  }
+  
+}
 
 // Fonction qui retourne le minimum
 int minimum(const char res[30][100]){
+  sort(res);
   int i = 1;
   int min = atoi(res[i]);
   for (i ; i < NUMBER_OF_STRING; i++)
@@ -156,47 +189,46 @@ int recois_envoie_message(int socketfd) {
     return(EXIT_FAILURE);
   }
   struct Json res = parse(data);
+  if (strcmp(res.code, "\"error\"") == 0) {
+    perror("erreur convertion json");
+    return(EXIT_FAILURE);
+  }
+
   /*
    * extraire le code des données envoyées par le client. 
    * Les données envoyées par le client peuvent commencer par le mot "message :" ou un autre mot.
    */
   
-  //printf ("Message recu:%s\n", data);
-  print_array(res);
-  
-  if(strcmp(res.code, "nom") == 0) {
-    char response[30] = "";
-    strcpy(response, res.code);
-    strcat(response, ": ");
-    strcat(response, res.valeurs[0]);
-    renvoie_message(client_socket_fd, response);
-  } else if(strcmp(res.code, "couleurs") == 0 || strcmp(res.code, "balises") == 0) {
-    printf("couleurs, balises JSON");
-    char response[30] = "";
-    strcpy(response, res.code);
-    strcat(response, ": enregistrés");
+  struct Json response = {"", {""}};
+  strcpy(response.code, res.code);
+
+  if(strcmp(res.code, "\"nom\"") == 0 || strcmp(res.code, "\"message\"") == 0) {
+    // Partie de nom et message
+    strcpy(response.valeurs[0], res.valeurs[0]);
+  } else if(strcmp(res.code, "\"couleurs\"") == 0 || strcmp(res.code, "\"balises\"") == 0) {
+    // Partie de balises et couleurs
     char file[30] = "./files/";
     strcat(file, res.code);
     strcat(file, ".txt");
+    // Ouvrir un fichier (couleurs.txt ou balises)
     FILE *fp;
     fp = fopen(file, "a");
     int i;
     for ( i = 0; i < sizeof res.valeurs / sizeof res.valeurs[0]; i++ ) {
       if(res.valeurs[i][0] != '\0') {
+        // Pour chaque valeur non vide
         char line[30] = "";
         strcpy(line, res.valeurs[i]);
         strcat(line, "\n");
         printf("%s", line);
+        // On écrit dans le fichier
         fputs(line, fp);
       }
     }
     fclose(fp);
-    renvoie_message(client_socket_fd, response);
-  } else if(strcmp(res.code, "calcul") == 0) {
-    printf("calcul JSON");
-    char response[30] = "";
-    strcpy(response, res.code);
-    strcat(response, ": ");
+    strcpy(response.valeurs[0], "\"enregistré\"");
+  } else if(strcmp(res.code, "\"calcul\"") == 0) {
+    // Partie de calcul
     char str[100];
     int i1 = atoi(res.valeurs[1]);
     int i2 = atoi(res.valeurs[2]);
@@ -204,26 +236,29 @@ int recois_envoie_message(int socketfd) {
         sprintf(str, "%i", (i1 + i2));
     else if (strchr(res.valeurs[0], '-') != NULL)
         sprintf(str, "%i", (i1 - i2));
-    else if (strcmp(res.valeurs[0], "minimum") == 0)
+    else if (strcmp(res.valeurs[0], "\"minimum\"") == 0)
         sprintf(str, "%i", minimum(res.valeurs));
-    else if (strcmp(res.valeurs[0], "maximum") == 0)
+    else if (strcmp(res.valeurs[0], "\"maximum\"") == 0)
         sprintf(str, "%i", maximum(res.valeurs));
-    else if (strcmp(res.valeurs[0], "moyenne") == 0)
+    else if (strcmp(res.valeurs[0], "\"moyenne\"") == 0)
         sprintf(str, "%.2f", moyenne(res.valeurs));
-    else if (strcmp(res.valeurs[0], "ecarttype") == 0)
+    else if (strcmp(res.valeurs[0], "\"ecarttype\"") == 0)
         sprintf(str, "%.2f", ecarttype(res.valeurs)); 
     else
         sprintf(str, "%i", (i1 * i2));
-    strcat(response, str);
-    renvoie_message(client_socket_fd, response);
-  } else if(strcmp(res.code, "plot") == 0) {
-    printf("plot JSON");
+    strcpy(response.valeurs[0], str);
+  } else if(strcmp(res.code, "\"plot\"") == 0) {
+    // Partie de plot
     plot(res);
+    strcpy(response.valeurs[0], "\"plot\"");
   } else {
+    // Partie erreur
     printf("Error : Pas de code valide !\n");
+    strcpy(response.valeurs[0], "\"Pas de code valide !\"");
   }
-  printf("\n");
+  renvoie_message(client_socket_fd, toString(response));
   //fermer le socket
+  printf("fin");
   close(socketfd);
 }
 

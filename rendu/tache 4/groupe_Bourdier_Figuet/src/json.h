@@ -20,5 +20,6 @@ typedef struct Json {
 
 void print_array(struct Json);
 struct Json parse(char *);
+char * toString(struct Json );
 
 #endif
