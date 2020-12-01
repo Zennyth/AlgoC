@@ -90,7 +90,7 @@ int envoie_recois_message(char *pathname) {
     perror("erreur convertion json");
     return -1;
   } else {
-    // Si l'entré utilisateur est bien convertissable en json alors
+    // Si l'entré utilisateur est bien convertissable en json alors 
     int socketfd;
     int bind_status;
 
