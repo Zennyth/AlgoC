@@ -14,11 +14,11 @@ message : exemple
 message : +,10,20
 #### Couleurs
 > type de message : couleurs
-message : 3,#123456,#321654,#987654
+message : 3,"#123456","#321654","#987654"
 #### Balises
 > type de message : balises
-message : 3,#123456,#321654,#987654
+message : 3,"#123456","#321654","#987654"
 #### Plot
->Pour cette fonctionnalité, il faut commenter la ligne 137 **envoie_recois_message()** dans le fichier _client.c_ et décommenter la ligne suivante (ligne 138). 
+>Pour cette fonctionnalité, il faut ajouter en argument le path de l'image
 type de message : plot
-message : 3,#123456,#321654,#987654
+nombre de couleurs : 1~30
