@@ -19,111 +19,6 @@
 #include "json.c"
 #include "bmp.h"
 
-// Import que l'on a fait
-#include <math.h>
-
-int intComparator ( const void * first, const void * second ) {
-    int firstInt = * (const int *) first;
-    int secondInt = * (const int *) second;
-    return firstInt - secondInt;
-}
-// Fonction de tri du tableau
-int sort(const char res[30][100]){
-  int i = 2;
-  int min = atoi(res[i]);
-  int tab[NUMBER_OF_STRING];
-  for (i ; i < NUMBER_OF_STRING; i++)
-	{
-    if(res[i][0] != '\0') {
-      int nb = atoi(res[i]);
-      tab[i-2] = nb;
-    } 
-	}
-  
-  qsort(tab,sizeof tab / sizeof tab[0] - 4,sizeof tab[0], intComparator);
-  for (int j = 0 ; j < sizeof tab / sizeof tab[0] ; j++)
-  {
-    int nb2 = tab[j];
-    if (nb2 != 0)
-    {
-      if(tab[j] != '\0') {
-        printf("%d\n", tab[j]); 
-      }
-    }
-      
-  }
-  
-}
-
-// Fonction qui retourne le minimum
-int minimum(const char res[30][100]){
-  sort(res);
-  int i = 1;
-  int min = atoi(res[i]);
-  for (i ; i < NUMBER_OF_STRING; i++)
-	{
-    if(res[i][0] != '\0') {
-      int nb = atoi(res[i]);
-      if ( min < nb )
-        min = min;
-      else
-        min = nb;
-    }
-	}
-  return min;
-}
-
-// Fonction qui retourne le maximum
-int maximum(const char res[30][100]){
-  int i = 1;
-  int max = atoi(res[i]);
-  for (i ; i < NUMBER_OF_STRING; i++)
-	{
-    if(res[i][0] != '\0') {
-      int nb = atoi(res[i]);
-      if ( max > nb )
-        max = max;
-      else
-        max = nb;
-    }
-	}
-  return max;
-}
-
-// Fonction qui retourne la moyenne
-float moyenne(const char res[30][100]){
-  int i = 1;
-  float moy;
-  float somme = 0;
-  for (i ; i < NUMBER_OF_STRING; i++)
-	{
-    if(res[i][0] != '\0') {
-      int nb = atoi(res[i]);
-      somme = somme + nb;
-      moy = somme / i;
-    }
-	}
-  return moy;
-}
-
-// Fonction qui retourne l'ecarttype
-float ecarttype(const char res[30][100]){
-  int i = 1;
-  float moy = moyenne(res);
-  float somme = 0;
-  float ecarttype;
-  for (i ; i < NUMBER_OF_STRING; i++)
-	{
-    if(res[i][0] != '\0') {
-      int nb = atoi(res[i]);
-      somme = somme + pow(nb - moy,2);
-      ecarttype = sqrt(somme/i);
-    }
-	}
-  return ecarttype;
-}
-
-
 void plot(struct Json data) {
   
   //Extraire le compteur et les couleurs RGB 
@@ -148,7 +43,6 @@ void plot(struct Json data) {
   printf("Plot: FIN\n");
   pclose(p);
 }
-
 
 /* renvoyer un message (*data) au client (client_socket_fd)
  */
@@ -235,14 +129,6 @@ int recois_envoie_message(int socketfd) {
         sprintf(str, "%i", (i1 + i2));
     else if (strchr(res.valeurs[0], '-') != NULL)
         sprintf(str, "%i", (i1 - i2));
-    else if (strcmp(res.valeurs[0], "\"minimum\"") == 0)
-        sprintf(str, "%i", minimum(res.valeurs));
-    else if (strcmp(res.valeurs[0], "\"maximum\"") == 0)
-        sprintf(str, "%i", maximum(res.valeurs));
-    else if (strcmp(res.valeurs[0], "\"moyenne\"") == 0)
-        sprintf(str, "%.2f", moyenne(res.valeurs));
-    else if (strcmp(res.valeurs[0], "\"ecarttype\"") == 0)
-        sprintf(str, "%.2f", ecarttype(res.valeurs)); 
     else
         sprintf(str, "%i", (i1 * i2));
     strcpy(response.valeurs[0], str);
@@ -256,15 +142,9 @@ int recois_envoie_message(int socketfd) {
     strcpy(response.valeurs[0], "\"Pas de code valide !\"");
   }
   renvoie_message(client_socket_fd, toString(response));
-<<<<<<< HEAD
   //fermer le socket 
-=======
-  //fermer le socket
-  printf("fin");
->>>>>>> 4d465675faec989407a25713119323011f242fa6
   close(socketfd);
 }
-
 
 int main() {
 

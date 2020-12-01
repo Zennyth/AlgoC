@@ -19,9 +19,7 @@
 #include "json.c"
 #include "bmp.h"
 
-<<<<<<< HEAD
-=======
-// Import que l'on a fait
+// Import que l'on a fait 
 #include <math.h>
 
 int intComparator ( const void * first, const void * second ) {
@@ -29,7 +27,7 @@ int intComparator ( const void * first, const void * second ) {
     int secondInt = * (const int *) second;
     return firstInt - secondInt;
 }
-// Fonction de tri du tableau
+// Fonction de tri du tableau 
 int sort(const char res[30][100]){
   int i = 2;
   int min = atoi(res[i]);
@@ -126,7 +124,6 @@ float ecarttype(const char res[30][100]){
 }
 
 
->>>>>>> 4d465675faec989407a25713119323011f242fa6
 void plot(struct Json data) {
   
   //Extraire le compteur et les couleurs RGB 
@@ -152,10 +149,6 @@ void plot(struct Json data) {
   pclose(p);
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 4d465675faec989407a25713119323011f242fa6
 /* renvoyer un message (*data) au client (client_socket_fd)
  */
 int renvoie_message(int client_socket_fd, char *data) {
@@ -226,10 +219,6 @@ int recois_envoie_message(int socketfd) {
         char line[30] = "";
         strcpy(line, res.valeurs[i]);
         strcat(line, "\n");
-<<<<<<< HEAD
-=======
-        printf("%s", line);
->>>>>>> 4d465675faec989407a25713119323011f242fa6
         // On écrit dans le fichier
         fputs(line, fp);
       }
@@ -245,8 +234,6 @@ int recois_envoie_message(int socketfd) {
         sprintf(str, "%i", (i1 + i2));
     else if (strchr(res.valeurs[0], '-') != NULL)
         sprintf(str, "%i", (i1 - i2));
-<<<<<<< HEAD
-=======
     else if (strcmp(res.valeurs[0], "\"minimum\"") == 0)
         sprintf(str, "%i", minimum(res.valeurs));
     else if (strcmp(res.valeurs[0], "\"maximum\"") == 0)
@@ -255,12 +242,11 @@ int recois_envoie_message(int socketfd) {
         sprintf(str, "%.2f", moyenne(res.valeurs));
     else if (strcmp(res.valeurs[0], "\"ecarttype\"") == 0)
         sprintf(str, "%.2f", ecarttype(res.valeurs)); 
->>>>>>> 4d465675faec989407a25713119323011f242fa6
     else
         sprintf(str, "%i", (i1 * i2));
     strcpy(response.valeurs[0], str);
   } else if(strcmp(res.code, "\"plot\"") == 0) {
-    // Partie de plot
+    // Partie de plot 
     plot(res);
     strcpy(response.valeurs[0], "\"plot\"");
   } else {
@@ -269,19 +255,10 @@ int recois_envoie_message(int socketfd) {
     strcpy(response.valeurs[0], "\"Pas de code valide !\"");
   }
   renvoie_message(client_socket_fd, toString(response));
-<<<<<<< HEAD
   //fermer le socket 
   close(socketfd);
 }
 
-=======
-  //fermer le socket
-  printf("fin");
-  close(socketfd);
-}
-
-
->>>>>>> 4d465675faec989407a25713119323011f242fa6
 int main() {
 
   int socketfd;

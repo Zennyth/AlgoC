@@ -11,10 +11,11 @@ CLIENT = client
 all: $(SERVER) $(CLIENT)
 
 $(SERVER): $(SOBJS)
-	$(CC) -o $(SERVER) $(SOBJS) -lm
+	$(CC) -o $(SERVER) $(SOBJS)
 
 $(CLIENT): $(COBJS)
-	$(CC) -o $(CLIENT) $(COBJS) -lm
+	$(CC) -o $(CLIENT) $(COBJS)
 
 .c.o: 
-	$(CC) -c $*.c -lm
+	$(CC) -c $*.c
+

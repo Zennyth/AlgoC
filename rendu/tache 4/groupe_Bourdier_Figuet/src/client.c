@@ -59,14 +59,13 @@ int envoie_recois_message(char *pathname) {
   memset(data, 0, sizeof(data));
 
   // Exemple d'entré pour couleurs
-  //char typeMessage[100] = "\"couleurs\"";
-  char typeMessage[100] = "message";
-  /*
-  printf("Votre type de message (max 1000 caracteres): ");
+  //char typeMessage[100] = "\"couleurs\""; 
+  char typeMessage[100] = "";
+  printf("Votre type de message (max 1000 caracteres): ");  
   fgets(typeMessage, 1024, stdin);
-  strtok(typeMessage, "\n");*/
+  strtok(typeMessage, "\n");
+  
   char message[500] = "";
-
   if(strcmp(typeMessage, "couleurs") == 0 || strcmp(typeMessage, "balises") == 0 || strcmp(typeMessage, "plot") == 0) {
     analyse(pathname, message);
     sprintf(data, "{\"code\":\"%s\",\"valeurs\":[%s]}", typeMessage, message);
@@ -77,7 +76,11 @@ int envoie_recois_message(char *pathname) {
     printf("Votre message %s (max 1000 caracteres): ", message);
     fgets(message, 1024, stdin);
     strtok(message, "\n");
-    sprintf(data, "{\"code\":\"%s\",\"valeurs\":[\"%s\"]}", typeMessage, message);
+    if(strcmp(typeMessage, "calcul") == 0) {
+      sprintf(data, "{\"code\":\"%s\",\"valeurs\":[%s]}", typeMessage, message);
+    } else {
+      sprintf(data, "{\"code\":\"%s\",\"valeurs\":[\"%s\"]}", typeMessage, message);
+    }
   }
 
   struct Json res = parse(strdup(data));
@@ -136,40 +139,6 @@ int envoie_recois_message(char *pathname) {
   return 0;
 }
 
-<<<<<<< HEAD
-=======
-
-void analyse(char *pathname, char *data) {
-  //compte de couleurs
-  couleur_compteur *cc = analyse_bmp_image(pathname);
-
-  int count;
-  strcpy(data, "{code:plot,valeurs:[");
-  char nbCouleurs[100];
-  printf("Votre nombre de couleurs (max 30): ");
-  fgets(nbCouleurs, 1024, stdin);
-  int n = atoi(nbCouleurs);
-  char temp_string[10] = "30,";
-  if (n != 30) {
-    sprintf(temp_string, "%i,", n);
-  }
-  strcat(data, temp_string);
-  
-  //choisir 30 couleurs
-  for (count = 1; count < (n+1) && cc->size - count >0; count++) {
-    if(cc->compte_bit ==  BITS32) {
-      sprintf(temp_string, "#%02x%02x%02x,", cc->cc.cc24[cc->size-count].c.rouge,cc->cc.cc32[cc->size-count].c.vert,cc->cc.cc32[cc->size-count].c.bleu);
-    }
-    if(cc->compte_bit ==  BITS24) {
-      sprintf(temp_string, "#%02x%02x%02x,", cc->cc.cc32[cc->size-count].c.rouge,cc->cc.cc32[cc->size-count].c.vert,cc->cc.cc32[cc->size-count].c.bleu);
-    }
-    strcat(data, temp_string);
-  }
-  //enlever le dernier virgule
-  strcat(data, "]}");
-}
-
->>>>>>> 4d465675faec989407a25713119323011f242fa6
 int envoie_couleurs(int socketfd, char *pathname) {
   char data[1024];
   memset(data, 0, sizeof(data));
@@ -209,16 +178,9 @@ int main(int argc, char **argv) {
   if ( connect_status < 0 ) {
     perror("connection serveur");
     exit(EXIT_FAILURE);
-<<<<<<< HEAD
   }
   */
   envoie_recois_message(argv[1]);
-=======
-  }*/
-
-  //envoie_recois_json(socketfd, send);
-  envoie_recois_message();
->>>>>>> 4d465675faec989407a25713119323011f242fa6
   //envoie_couleurs(socketfd, argv[1]);
   close(socketfd);
 }

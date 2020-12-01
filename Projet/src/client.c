@@ -57,10 +57,9 @@ int envoie_recois_message(char *pathname) {
   char data[1024];
   // la réinitialisation de l'ensemble des données
   memset(data, 0, sizeof(data));
-  printf("dshjgc");
+
   // Exemple d'entré pour couleurs
   //char typeMessage[100] = "\"couleurs\"";
-<<<<<<< HEAD
   char typeMessage[100] = "message";
   /*
   printf("Votre type de message (max 1000 caracteres): ");
@@ -80,22 +79,6 @@ int envoie_recois_message(char *pathname) {
     strtok(message, "\n");
     sprintf(data, "{\"code\":\"%s\",\"valeurs\":[\"%s\"]}", typeMessage, message);
   }
-=======
-  char typeMessage[100] = "calcul";
-  /*printf("Votre type de message (max 1000 caracteres): ");
-  fgets(typeMessage, 1024, stdin);
-  strtok(typeMessage, "\n");*/
-
-  // Demandez à l'utilisateur d'entrer un message
-  // Exemple d'entré pour couleurs
-  //char message[100] = "10,\"#123456\",\"#123456\",\"#123456\",\"#123456\",\"#123456\"";
-  char message[100] = "\"minimum\",1,50,65,34,57,21";
-  /*printf("Votre %s (max 1000 caracteres): ", message);
-  fgets(message, 1024, stdin);
-  strtok(message, "\n");*/
-
-  sprintf(data, "{\"code\":\"%s\",\"valeurs\":[%s]}", typeMessage, message);
->>>>>>> 4d465675faec989407a25713119323011f242fa6
 
   struct Json res = parse(strdup(data));
 
