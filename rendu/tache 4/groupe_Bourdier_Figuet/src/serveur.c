@@ -28,74 +28,65 @@ int intComparator ( const void * first, const void * second ) {
     return firstInt - secondInt;
 }
 // Fonction de tri du tableau 
-int * sort(const char res[30][100]){
+char * sort(const char res[30][100]){
   int i = 2;
-  int min = atoi(res[i]);
-  int tab[NUMBER_OF_STRING];
+  static int tab[NUMBER_OF_STRING];
+  int nb;
   for (i ; i < NUMBER_OF_STRING; i++)
 	{
     if(res[i][0] != '\0') {
-      int nb = atoi(res[i]);
+      nb = atoi(res[i]); 
       tab[i-2] = nb;
+      
     } 
 	}
   
+  
+  // sort dans l'ordre croissant
   qsort(tab,sizeof tab / sizeof tab[0] - 4,sizeof tab[0], intComparator);
-  /*for (int j = 0 ; j < sizeof tab / sizeof tab[0] ; j++)
+  int nbvaleur = atoi(res[1]);
+
+  int returntab[NUMBER_OF_STRING];
+  int val = 0;
+  for (int j = 0 ; j < sizeof tab / sizeof tab[0] ; j++)
   {
     int nb2 = tab[j];
     if (nb2 != 0)
     {
       if(tab[j] != '\0') {
-        printf("%d\n", tab[j]); 
+        returntab[val] = tab[j];
+        val = val +1;
       }
     }  
-  }*/
-  return tab;
-}
-
-// Fonction qui retourne le minimumtabtab
-struct Json minimum(const char res[30][100]){
-  int tab[NUMBER_OF_STRING] = sort(res);
-  char tabtab[NUMBER_OF_STRING];
-  struct Json tabreturn = {"calcul",{""}};
-  int nbval = atoi(res[2]);
-  for (int i = 0; i < nbval; i++)
-  {
-    strcpy(tabreturn.valeurs[i],itoa(tab[i],tabtab,10));
   }
-  return tabreturn;
-
-  /*int i = 1;
-  int min = atoi(res[i]);
-  for (i ; i < NUMBER_OF_STRING; i++)
-	{
-    if(res[i][0] != '\0') {
-      int nb = atoi(res[i]);
-      if ( min < nb )
-        min = min;
-      else
-        min = nb;
+  if (val<nbvaleur)
+  {
+    nbvaleur = val;
+  }
+  static char returnvalue[100] = "";
+  // Si le client saisit minimum
+  if (strcmp(res[0], "\"minimum\"") == 0){    
+    for (int i = 0 ; i < nbvaleur; i++)
+    {
+      char element[10] = "";
+      sprintf(element, "%i,",returntab[i]);
+      strcat(returnvalue,element);
+      printf("%i\n", returntab[i]);
     }
-	}
-  return min;*/
-}
-
-// Fonction qui retourne le maximum
-int maximum(const char res[30][100]){
-  int i = 1;
-  int max = atoi(res[i]);
-  for (i ; i < NUMBER_OF_STRING; i++)
-	{
-    if(res[i][0] != '\0') {
-      int nb = atoi(res[i]);
-      if ( max > nb )
-        max = max;
-      else
-        max = nb;
+  }
+  else{
+    // Si le client saisit maximum
+    int longueurtab = sizeof returntab / sizeof returntab[0];
+    for (int i = val - nbvaleur; i < val ; i++)
+    {
+      char element[10] = "";
+      sprintf(element, "%i,",returntab[i]);
+      strcat(returnvalue,element);
+      printf("%i\n", returntab[i]);
     }
-	}
-  return max;
+  }
+  returnvalue[strlen(returnvalue)-1] = '\0';
+  return returnvalue;
 }
 
 // Fonction qui retourne la moyenne
@@ -103,10 +94,11 @@ float moyenne(const char res[30][100]){
   int i = 1;
   float moy;
   float somme = 0;
+  int nb;
   for (i ; i < NUMBER_OF_STRING; i++)
 	{
     if(res[i][0] != '\0') {
-      int nb = atoi(res[i]);
+      nb = atoi(res[i]);
       somme = somme + nb;
       moy = somme / i;
     }
@@ -120,10 +112,11 @@ float ecarttype(const char res[30][100]){
   float moy = moyenne(res);
   float somme = 0;
   float ecarttype;
+  int nb;
   for (i ; i < NUMBER_OF_STRING; i++)
 	{
     if(res[i][0] != '\0') {
-      int nb = atoi(res[i]);
+      nb = atoi(res[i]);
       somme = somme + pow(nb - moy,2);
       ecarttype = sqrt(somme/i);
     }
@@ -244,11 +237,12 @@ int recois_envoie_message(int socketfd) {
         sprintf(str, "%i", (i1 - i2));
     else if (strcmp(res.valeurs[0], "\"minimum\"") == 0)
       {
-      //sprintf(str, "%i", minimum(res.valeurs));
-      printf("%s",toString(minimum(res.valeurs)));
+      sprintf(str, "%s", sort(res.valeurs));
+      printf("%s", str);
+      // printf("%s",toString(minimum(res.valeurs)));
       }
     else if (strcmp(res.valeurs[0], "\"maximum\"") == 0)
-        sprintf(str, "%i", maximum(res.valeurs));
+        sprintf(str, "%s", sort(res.valeurs));
     else if (strcmp(res.valeurs[0], "\"moyenne\"") == 0)
         sprintf(str, "%.2f", moyenne(res.valeurs));
     else if (strcmp(res.valeurs[0], "\"ecarttype\"") == 0)

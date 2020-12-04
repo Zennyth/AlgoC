@@ -18,7 +18,6 @@
 #include "bmp.h"
 #include "json.h"
 
-
 void analyse(char *pathname, char *data) {
   //compte de couleurs
   couleur_compteur *cc = analyse_bmp_image(pathname);
