@@ -12,6 +12,9 @@
 #include "bmp.h"
 #include "json.h"
 
+int NUMBER_OF_TEST = 0;
+int NUMBER_OF_SUCESSFULL_TEST = 0;
+
 
 bool unit_testing_connection() {
   return true;
@@ -73,6 +76,80 @@ char * sendMessage(int socketfd, char * data) {
     return result;
 }
 
+void print_test(char * data, char * response, char * status, char * type) {
+  printf("==========================================================================\n");
+  printf("Start Test ! (%s)\n", type);
+  printf("Sent data : %s\n", data);
+  printf("Received data: %s\n", response);
+  printf("Test Status : %s\n", status);
+}
+
+void test_validation(int socketfd) {
+  char data[1024]="{\"id\":\"Zennyth\",\"code\":\"message\",\"valeurs\":[\"hello\"]}";
+  char response[1024];
+  char status[10];
+  strcpy(response, sendMessage(socketfd, data));
+  if(strcmp(data, response) == 0) {
+    strcpy(status,"Success");
+    NUMBER_OF_SUCESSFULL_TEST++;
+  } else {
+    strcpy(status,"Failed");
+  }
+  NUMBER_OF_TEST++;
+  print_test(data, response, status, "validation JSON");
+}
+
+void test_code(char * code, bool expected) {
+  char data[1024];
+  bool res = false;
+  char status[10];
+  sprintf(data, "{\"id\":\"Zennyth\",\"code\":%s,\"valeurs\":[\"test\"]}", code);
+  struct Json json = parse(strdup(data));
+  if(strcmp(json.code, code) == 0) {
+    res = true;
+  }
+  if(res == expected) {
+    strcpy(status,"Success");
+    NUMBER_OF_SUCESSFULL_TEST++;
+  } else {
+    strcpy(status,"Failed");
+  }
+  NUMBER_OF_TEST++;
+  print_test(data, toString(json), status, "validation des différents codes");
+}
+
+void test_codes() {
+  test_code("\"calcul\"", true);
+  test_code("\"message\"", true);
+  test_code("\"nom\"", true);
+  test_code("\"plot\"", true);
+  test_code("\"couleurs\"", true);
+  test_code("\"balises\"", true);
+  test_code("\"autre\"", false);
+}
+
+void test_validate(char * data, bool expected) {
+  bool res = false;
+  char status[10];
+  struct Json json = parse(strdup(data));
+  if(strcmp(toString(json), data) == 0) {
+    res = true;
+  }
+  if(res == expected) {
+    strcpy(status,"Success");
+    NUMBER_OF_SUCESSFULL_TEST++;
+  } else {
+    strcpy(status,"Failed");
+  }
+  NUMBER_OF_TEST++;
+  print_test(data, toString(json), status, "rawString => Parsing => toString validation");
+}
+
+void test_validates() {
+  test_validate("{\"id\":\"Zennyth\",\"code\":\"message\",\"valeurs\":[\"test\"]}", true);
+  test_validate("{\"id\":\"Zennyth\",\"code\":\"message\",\"valeurs\":[1,2,3]}", true);
+}
+
 void main() {
     // Si l'entré utilisateur est bien convertissable en json alors
     int socketfd;
@@ -102,12 +179,15 @@ void main() {
       exit(EXIT_FAILURE);
     }
 
-    char data[1024]="{\"id\":\"Zennyth\",\"code\":\"message\",\"valeurs\":[\"hello\"]}";
-    char response[1024];
-    printf("%s\n", response);
-    strcpy(response, sendMessage(socketfd, data));
-    printf("%s\n", response);
-    unit_testing();
-    printf("bonjour unit Testing");
+    //test_validation(socketfd);
+    test_codes();
+    test_validates();
+    char ratio[10];
+    sprintf(ratio, "%i/%i", NUMBER_OF_SUCESSFULL_TEST, NUMBER_OF_TEST++);
+    printf("==========================================================================\n");
+    printf("Resume : \n");
+    printf("Ration of successful tests : %s\n", ratio);
+    printf("==========================================================================\n");
+    
     close(socketfd);
 }
