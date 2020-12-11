@@ -42,7 +42,7 @@ char * toString(struct Json j1) {
   for (int i = 0; i < NUMBER_OF_STRING; i++)
 	{
     if(j1.valeurs[i][0] != '\0') {
-      if(i > 2) {
+      if(i > 0) {
         strcat(raw, ",");
       }
       strcat(raw, j1.valeurs[i]);
