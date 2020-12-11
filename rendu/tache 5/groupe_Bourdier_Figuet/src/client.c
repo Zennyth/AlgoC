@@ -88,6 +88,7 @@ int envoie_recois_message(char *pathname) {
     }
   }
   struct Json res = parse(strdup(data));
+  printf("%s\n", toString(res));
 
   if (strcmp(res.code, "\"error\"") == 0) {
     print_array(res);

@@ -33,6 +33,7 @@ int intComparator ( const void * first, const void * second ) {
 char * sort(const char res[30][100]){
   int i = 2;
   static int tab[NUMBER_OF_STRING];
+  memset(tab,0,sizeof(tab));
   int nb;
   for (i ; i < NUMBER_OF_STRING; i++)
 	{
@@ -49,6 +50,7 @@ char * sort(const char res[30][100]){
   int nbvaleur = atoi(res[1]);
 
   int returntab[NUMBER_OF_STRING];
+  
   int val = 0;
   for (int j = 0 ; j < sizeof tab / sizeof tab[0] ; j++)
   {
@@ -66,6 +68,7 @@ char * sort(const char res[30][100]){
     nbvaleur = val;
   }
   static char returnvalue[100] = "";
+  memset(returnvalue,0,sizeof(returnvalue));
   // Si le client saisit minimum
   if (strcmp(res[0], "\"minimum\"") == 0){    
     for (int i = 0 ; i < nbvaleur; i++)
@@ -73,7 +76,7 @@ char * sort(const char res[30][100]){
       char element[10] = "";
       sprintf(element, "%i,",returntab[i]);
       strcat(returnvalue,element);
-      printf("%i\n", returntab[i]);
+      //printf("%i\n", returntab[i]);
     }
   }
   else{
@@ -84,10 +87,12 @@ char * sort(const char res[30][100]){
       char element[10] = "";
       sprintf(element, "%i,",returntab[i]);
       strcat(returnvalue,element);
-      printf("%i\n", returntab[i]);
+      //printf("%i\n", returntab[i]);
     }
   }
   returnvalue[strlen(returnvalue)-1] = '\0';
+  memset(returntab,0,sizeof(returntab));
+  
   return returnvalue;
 }
 
@@ -226,7 +231,7 @@ int recois_envoie_message(int client_socket_fd) {
     strcpy(response.valeurs[0], "\"enregistré\"");
   } else if(strcmp(res.code, "\"calcul\"") == 0) {
     // Partie de calcul
-    char str[100];
+    char str[100] = "";
     int i1 = atoi(res.valeurs[1]);
     int i2 = atoi(res.valeurs[2]);
     if (strchr(res.valeurs[0], '+') != NULL)
@@ -235,7 +240,9 @@ int recois_envoie_message(int client_socket_fd) {
         sprintf(str, "%i", (i1 - i2));
     else if (strcmp(res.valeurs[0], "\"minimum\"") == 0 || strcmp(res.valeurs[0], "\"maximum\"") == 0)
       {
+        
         sprintf(str, "%s",sort(res.valeurs));
+        
       }
     else if (strcmp(res.valeurs[0], "\"moyenne\"") == 0)
         sprintf(str, "%.2f", moyenne(res.valeurs));
