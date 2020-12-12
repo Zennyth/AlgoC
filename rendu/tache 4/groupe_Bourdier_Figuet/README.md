@@ -1,5 +1,6 @@
+    
 #### Objectifs :
-> Notre objectif est d'utiliser le format d'image bmp et de communiquer entre le serveur et le client à l'aide du format de message JSON.
+> Notre objectif est d'implémenter les fonctionnalités suivantes sur le serveur : moyenne, le minimum, maximum, écart-type
 > La communication se fait encore avec des **_string_**, le JSON nous sert juste à intéragir.
 
 #### Fichiers :
@@ -12,22 +13,18 @@
 > Nous avons un dossier files qui stocke tous les fichiers textes (couleurs et balises).
 
 #### Bibliothèques :
-> Nous n'avons pas touché aux bibliothèques, nous avons gardé tous les imports qui était déjà présent dans la code (string.h, unistd.h, stdio.h, stdlib.h).
+> Nous avons installé une bibiliothèques : math.h pour le calcul de l'écart-type (racine carrée) et nous avons également gardé tous les imports qui était déjà présent dans la code (string.h, unistd.h, stdio.h, stdlib.h).
 
 #### Références :
 > Nous avons cherché sur internet lorsque nous avions des erreurs de syntax ou que nous comprenions pas une erreur (majoritairement Stack Overflow).
-> Nous avons également demandé de l'aide à un groupe (BOYER Charles et LAZARETH Baptiste) en cas de dernier recours.
 
 #### Difficultés :
-> Cette râche était définitivement plus dur que les précedentes puisque nous avons suivis une architecture de code précise.
-> Ce n'était pas irréalisable mais la difficulté à augmenté.
+> Cette tâche n'était pas si dure que ça c'est pour cela que Monsieur John Samuel nous a donné un défi supplémentaire pour augmenter la difficulté de cette tâche.
 
 #### Commentaires :
-> Voici la description du fonctionnemnt de notre librairie Json qui pour l'instant est bien maigre comparé à l'originale.
-> String -> Vérificator -> Parsor -> Json Object
-> Concernant le parsing nous avons opté avec un découpage en index pour ainsi éviter au maximum les erreurs de saisie.
-> Nous avons décidé de gérer les erreurs avec d'autres objets json qui ont comme code: "error", ils ont aussi une description de l'erreur en question dans la propriété valeurs, ils sont sont ensuite affichés si jamais il y a eu une erreur de parsing.
-> Nous avons décidé de lever une exception si jamais l'utilisateur ne respectait pas le format suivant :
-> Propriété : "code", "valeurs" -> Exception levé : "Vous n'avez pas défini la propiété code" ou "Vous n'avez pas défini la propiété valeurs"
-> les valeurs des propriétés si dessus doivent respecté le format suivant :
-> "" pour les string et pas de guillemet pour les nombres
+> Le défi de Monsieur John Samuel était de modifier la focntion minimum et maximum en utilisant la fonction _qsort_.
+> En effet, nous avons donc fait une seule fonction pour le **minimum** et le **maximum** qui tri dans l'ordre croissant tous les nombres saisis par l'utilisateur. De plus, nous avons également rajouté une fonctionnalité : l'utilisateut saisi le nombre de chiffre qu'il veut que la fonction renvoie.
+Exemple, l'utilisateur saisi cette commande : "minimum",**3**,23,56,89,78,54,451  --> le premier mot saisie dit si c'es le _minimum_ ou le _maximum_, ensuite le nombre en **gras** signifie que le tableau retournera **3** valeurs et enfin ce sont les valeurs à trier. Cette commaande retournerait donc **23,54,56**.
+> L'utilisateur peut saisir au maximum 28 chiffres à trier.
+> Ensuite, pour la moyenne et l'écart-type, l'utilsateur ne saisit pas le nombre de chiffre qu'il veut que la fonction renvoie puisque ces fonctions renvoient automatiquement un seul nombre. 
+> Enfin, l'utilisateur peut saisir au maximum 29 chiffres pour ces deux fonctionnalités.

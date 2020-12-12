@@ -1,5 +1,6 @@
 #### Objectifs :
-> Notre objectif est d'utiliser le format d'image bmp et de communiquer entre le serveur et le client à l'aide du format de message JSON.
+> Notre objectif final pour ce projet est de créer une plate-forme multi-client. Jusqu'à maintenant, vous avez toujours un client et un serveur à la fois. Mais maintenant, nous voulons que plusieurs clients puissent communiquer avec votre serveur à la fois. Modifier votre code serveur, afin qu'il puisse accepter plusieurs requêtes client à la fois.
+> De plus, nous devions écrire des tests unitaires
 > La communication se fait encore avec des **_string_**, le JSON nous sert juste à intéragir.
 
 #### Fichiers :
@@ -7,27 +8,27 @@
 > Nous avons un autre dossier **images** dans lequel se trouve les _images_ pour la fonction _couleur_.
 > Nous avons un autre fichier **json** dans lequel se trouve le code de la librairie Json.
 > Pour savoir comment exécuter ce code, regardé le **_INSTALL_**.
+> Nous avons un autre fichier **unitTesting** dans lequel se trouve l'intégralité de nos tests unitaire.
 
 #### Dossier :
 > Nous avons un dossier files qui stocke tous les fichiers textes (couleurs et balises).
 
 #### Bibliothèques :
-> Nous n'avons pas touché aux bibliothèques, nous avons gardé tous les imports qui était déjà présent dans la code (string.h, unistd.h, stdio.h, stdlib.h).
+> Nous avons installé une bibiliothèques : math.h pour le calcul de l'écart-type (racine carrée) et nous avons également gardé tous les imports qui était déjà présent dans la code (string.h, unistd.h, stdio.h, stdlib.h).
 
 #### Références :
-> Nous avons cherché sur internet lorsque nous avions des erreurs de syntax ou que nous comprenions pas une erreur (majoritairement Stack Overflow).
-> Nous avons également demandé de l'aide à un groupe (BOYER Charles et LAZARETH Baptiste) en cas de dernier recours.
+> Nous avons cherché sur internet lorsque nous avions des erreurs de syntax ou que nous comprenions pas une erreur (majoritairement Stack Overflow). 
 
 #### Difficultés :
-> Cette râche était définitivement plus dur que les précedentes puisque nous avons suivis une architecture de code précise.
-> Ce n'était pas irréalisable mais la difficulté à augmenté.
+> Cette tâche était extremement compliqué puisque c'est la seule que nous avons pas réussi à terminer dans son entièreté. Nous n'avons pas réussi à développer les tests fonctionnels sur la multiplicité des clients sur le serveur. Néanmois cette multiplicité fonctionne correctement. 
 
 #### Commentaires :
-> Voici la description du fonctionnemnt de notre librairie Json qui pour l'instant est bien maigre comparé à l'originale.
-> String -> Vérificator -> Parsor -> Json Object
-> Concernant le parsing nous avons opté avec un découpage en index pour ainsi éviter au maximum les erreurs de saisie.
-> Nous avons décidé de gérer les erreurs avec d'autres objets json qui ont comme code: "error", ils ont aussi une description de l'erreur en question dans la propriété valeurs, ils sont sont ensuite affichés si jamais il y a eu une erreur de parsing.
-> Nous avons décidé de lever une exception si jamais l'utilisateur ne respectait pas le format suivant :
-> Propriété : "code", "valeurs" -> Exception levé : "Vous n'avez pas défini la propiété code" ou "Vous n'avez pas défini la propiété valeurs"
-> les valeurs des propriétés si dessus doivent respecté le format suivant :
-> "" pour les string et pas de guillemet pour les nombres
+> Anthony Chomienne nous a aidé à fixer les bugs sur le multi-client.
+> Les tests unitaires se lancent en exécutant le ./unitTesting, généré automatiquement par le Makefile.
+> Les tests unitaires sont regroupés dans le fichier UnitTesting qui teste la librairie Json en simmulant le côté client et le côté serveur.
+> Les types de tests :
+> * Librairie Json accpete tous les types d'opération
+> * Librairie Json accepte et analyse les messages
+> * Librairie Json valide les messages et respect le protocole de communication
+> 
+> La fonction Log installée sur le serveur permet de stocker tous les messages valides envoyés par les clients.

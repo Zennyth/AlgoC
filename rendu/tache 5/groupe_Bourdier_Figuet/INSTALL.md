@@ -30,3 +30,6 @@ message : 3,"#123456","#321654","#987654"
 >Pour cette fonctionnalité, il faut ajouter en argument le path de l'image
 type de message : plot
 nombre de couleurs : 1~30
+#### UnitTesting
+> Pour cette fonctionnalité, il suffit de lancer le serveur (./serveur) et les tests (./unitTesting)
+Ces 2 fichiers sont générés par le Makefile 
