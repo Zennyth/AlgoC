@@ -55,7 +55,8 @@ bool unit_testing() {
 
 char * sendMessage(int socketfd, char * data) {
     static char result[1024] = "";
-    printf("print : %s\n", data);
+    memset(result,0,sizeof(result));
+    
 
     int write_status = write(socketfd, data, strlen(data));
     if ( write_status < 0 ) {
@@ -150,6 +151,34 @@ void test_validates() {
   test_validate("{\"id\":\"Zennyth\",\"code\":\"message\",\"valeurs\":[1,2,3]}", true);
 }
 
+void test_value(char * data, char * result, bool expected, int socketfd) {
+  bool res = false;
+  char status[10];
+  char response[1024] = "";
+
+  //struct Json json = parse(strdup(data));
+  strcpy(response, strdup(sendMessage(socketfd, data)));
+  
+  if(strcmp(response, result) == 0) {
+    res = true;
+  }
+  if(res == expected) {
+    strcpy(status,"Success");
+    NUMBER_OF_SUCESSFULL_TEST++;
+  } else {
+    strcpy(status,"Failed");
+  }
+  NUMBER_OF_TEST++;
+  print_test(data, response, status, "rawString => Parsing => toString validation");
+}
+
+void test_values(int socketfd) {
+  test_value("{\"id\":\"Bourdier\",\"code\":\"calcul\",\"valeurs\":[\"minimum\",2,89,23,56]}","{\"id\":\"Bourdier\",\"code\":\"calcul\",\"valeurs\":[23,56]}",true,socketfd);
+  test_value("{\"id\":\"Bourdier\",\"code\":\"calcul\",\"valeurs\":[\"maximum\",2,2398,560,8999,234]}","{\"id\":\"Bourdier\",\"code\":\"calcul\",\"valeurs\":[2398,8999]}",true,socketfd);
+  test_value("{\"id\":\"Bourdier\",\"code\":\"calcul\",\"valeurs\":[\"moyenne\",0,5,10]}","{\"id\":\"Bourdier\",\"code\":\"calcul\",\"valeurs\":[5.00]}",true,socketfd);
+  test_value("{\"id\":\"Bourdier\",\"code\":\"calcul\",\"valeurs\":[\"ecarttype\",0,5,10]}","{\"id\":\"Bourdier\",\"code\":\"calcul\",\"valeurs\":[4.08]}",true,socketfd);
+}
+
 void main() {
     // Si l'entré utilisateur est bien convertissable en json alors
     int socketfd;
@@ -179,9 +208,10 @@ void main() {
       exit(EXIT_FAILURE);
     }
 
-    //test_validation(socketfd);
+    test_validation(socketfd);
     test_codes();
     test_validates();
+    test_values(socketfd);
     char ratio[10];
     sprintf(ratio, "%i/%i", NUMBER_OF_SUCESSFULL_TEST, NUMBER_OF_TEST++);
     printf("==========================================================================\n");
