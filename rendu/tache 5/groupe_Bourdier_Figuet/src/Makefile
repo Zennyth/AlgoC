@@ -19,7 +19,7 @@ $(CLIENT): $(COBJS)
 	$(CC) -o $(CLIENT) $(COBJS) -lm
 
 $(UNITTESTING): $(UOBJS)
-	$(CC) -o $(UNITTESTING) $(UOBJS) -lm
+	$(CC) -o $(UNITTESTING) $(UOBJS) -lm -lpthread
 
 .c.o: 
 	$(CC) -c $*.c -lm

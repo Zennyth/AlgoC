@@ -14,21 +14,22 @@
 > Nous avons un dossier files qui stocke tous les fichiers textes (couleurs et balises).
 
 #### Bibliothèques :
-> Nous avons installé une bibiliothèques : math.h pour le calcul de l'écart-type (racine carrée) et nous avons également gardé tous les imports qui était déjà présent dans la code (string.h, unistd.h, stdio.h, stdlib.h).
+> Nous avons installé deux bibiliothèques : math.h pour le calcul de l'écart-type (racine carrée), pthread.h afin de tester si le multiclient est disponible sur le serveur et nous avons également gardé tous les imports qui était déjà présent dans la code (string.h, unistd.h, stdio.h, stdlib.h).
 
 #### Références :
 > Nous avons cherché sur internet lorsque nous avions des erreurs de syntax ou que nous comprenions pas une erreur (majoritairement Stack Overflow). 
 
 #### Difficultés :
-> Cette tâche était extremement compliqué puisque c'est la seule que nous avons pas réussi à terminer dans son entièreté. Nous n'avons pas réussi à développer les tests fonctionnels sur la multiplicité des clients sur le serveur. Néanmois cette multiplicité fonctionne correctement. 
+> Cette tâche était extremement compliqué puisque c'est la seule que nous avons pas réussi à terminer dans son entièreté à temps. Nous avons finis les tests fonctionnels sur la mutiplicité des clients mais nous ne sommes pas convaincu de notre solution. 
 
 #### Commentaires :
 > Anthony Chomienne nous a aidé à fixer les bugs sur le multi-client.
 > Les tests unitaires se lancent en exécutant le ./unitTesting, généré automatiquement par le Makefile.
 > Les tests unitaires sont regroupés dans le fichier UnitTesting qui teste la librairie Json en simmulant le côté client et le côté serveur.
-> Les types de tests :
-> * Librairie Json accpete tous les types d'opération
+> Les types de tests unitaires :
+> * Librairie Json accepte tous les types d'opération
 > * Librairie Json accepte et analyse les messages
 > * Librairie Json valide les messages et respect le protocole de communication
-> 
+> Les types de tests fonctionnels :
+> * Multi-connexion des clients sur le serveur grâce à la mise en place du multi-thread.
 > La fonction Log installée sur le serveur permet de stocker tous les messages valides envoyés par les clients.
