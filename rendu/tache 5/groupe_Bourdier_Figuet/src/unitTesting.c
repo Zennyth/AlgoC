@@ -12,6 +12,9 @@
 #include "bmp.h"
 #include "json.h"
 
+#include <pthread.h>
+#define NUM_THREADS 2
+
 int NUMBER_OF_TEST = 0;
 int NUMBER_OF_SUCESSFULL_TEST = 0;
 
@@ -179,8 +182,59 @@ void test_values(int socketfd) {
   test_value("{\"id\":\"Bourdier\",\"code\":\"calcul\",\"valeurs\":[\"ecarttype\",0,5,10]}","{\"id\":\"Bourdier\",\"code\":\"calcul\",\"valeurs\":[4.08]}",true,socketfd);
 }
 
+void *test_multiCient(void *threadid)
+{
+  int socketfd;
+  int bind_status;
+
+  struct sockaddr_in server_addr, client_addr;
+
+  /*
+  * Creation d'une socket
+  */
+  socketfd = socket(AF_INET, SOCK_STREAM, 0);
+  if ( socketfd < 0 ) {
+    perror("socket");
+    exit(EXIT_FAILURE);
+  }
+
+  //détails du serveur (adresse et port)
+  memset(&server_addr, 0, sizeof(server_addr));
+  server_addr.sin_family = AF_INET;
+  server_addr.sin_port = htons(PORT);
+  server_addr.sin_addr.s_addr = INADDR_ANY;
+
+  //demande de connection au serveur
+  int connect_status = connect(socketfd, (struct sockaddr *) &server_addr, sizeof(server_addr));
+  if ( connect_status < 0 ) {
+    perror("connection serveur");
+    exit(EXIT_FAILURE);
+  }
+  struct Json res = parse(sendMessage(socketfd, "{\"id\":\"Zennyth\",\"code\":\"message\",\"valeurs\":[\"test\"]}"));
+  if(strcmp(res.code, "\"error\"") == 0) {
+    printf("Multicient is not working properly !\n");
+  }
+  pthread_exit(NULL);
+}
+
+void test_multiCients() {
+  pthread_t threads[NUM_THREADS];
+  int rc;
+  long t;
+  printf("A message will be displayed below if there is any error during the multi clients process.\n");
+  for(t=0; t<NUM_THREADS; t++){
+    rc = pthread_create(&threads[t], NULL, test_multiCient, (void *)t);
+    if (rc){
+      printf("ERROR; return code from pthread_create() is %d\n", rc);
+      exit(-1);
+    }
+  }
+
+  /* Last thing that main() should do */
+  pthread_exit(NULL);
+}
+
 void main() {
-    // Si l'entré utilisateur est bien convertissable en json alors
     int socketfd;
     int bind_status;
 
@@ -216,7 +270,8 @@ void main() {
     sprintf(ratio, "%i/%i", NUMBER_OF_SUCESSFULL_TEST, NUMBER_OF_TEST++);
     printf("==========================================================================\n");
     printf("Resume : \n");
-    printf("Ration of successful tests : %s\n", ratio);
+    printf("Ratio of successful tests : %s\n", ratio);
+    test_multiCients();
     printf("==========================================================================\n");
     
     close(socketfd);
